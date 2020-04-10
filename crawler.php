@@ -61,10 +61,18 @@ class Crawler {
       $src=$node->attr('src');
 
       // extract number from svg file
-      preg_match('/\/(\d+)\.svg/', $src, $matches);
-      $problem->rating_type=Rating::getRating($matches[1]);
-      $problem->rating_level=Rating::getLevel($matches[1]);
+      if(empty($src)) {
+        $problem->rating_type="";
+        $problem->rating_level="";
+      } else {
+        preg_match('/\/(\d+)\.svg/', $src, $matches);
+        $problem->rating_type=Rating::getRating($matches[1]);
+        $problem->rating_level=Rating::getLevel($matches[1]);
+      }
     } catch(Exception $e) {
+      $problem->rating_type="";
+      $problem->rating_level="";
+
       echo "<h5>Failed to find rating from Solved.ac</h5>";
       echo "$e";
     }
